@@ -11,6 +11,11 @@ const $msgs = document.getElementById("msgs");
 const msgTemplate = document.getElementById("msgTemplate").innerHTML;
 const locationTemplate = document.getElementById("locationTemplate").innerHTML;
 
+//Options
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
 $msgForm.addEventListener("submit", (e) => {
   e.preventDefault();
   $msgFormBtn.setAttribute("disabled", "disabled");
@@ -64,3 +69,5 @@ $sendLocationBtn.addEventListener("click", () => {
     );
   });
 });
+
+socket.emit("join", { username, room });
