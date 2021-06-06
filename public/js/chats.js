@@ -1,23 +1,48 @@
 const socket = io();
 
-document.getElementById("msgForm").addEventListener("submit", (e) => {
-  e.preventDefault();
+//Elements
+const $msgForm = document.getElementById("msgForm");
+const $msgFormInput = document.getElementById("msgFormInput");
+const $msgFormBtn = document.getElementById("msgFormBtn");
+const $sendLocationBtn = document.getElementById("sendLocationBtn");
+const $msgs = document.getElementById("msgs");
 
-  const msg = e.target.elements.msg.value;
+//Templates
+const msgTemplate = document.getElementById("msgTemplate").innerHTML;
+const locationTemplate = document.getElementById("locationTemplate").innerHTML;
+
+$msgForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  $msgFormBtn.setAttribute("disabled", "disabled");
+
+  const msg = $msgFormInput.value;
   socket.emit("sendMessage", msg, (err) => {
+    $msgFormBtn.removeAttribute("disabled");
+    $msgFormInput.value = "";
+    $msgFormInput.focus();
+
     if (err) return console.log(err);
     console.log("Deliverd!");
   });
 });
 
 socket.on("message", (msg) => {
-  console.log(msg);
+  const html = Mustache.render(msgTemplate, { msg });
+  $msgs.insertAdjacentHTML("beforeend", html);
 });
 
-document.getElementById("sendLocation").addEventListener("click", () => {
+socket.on("locationMessage", (url) => {
+  const html = Mustache.render(locationTemplate, { url });
+  $msgs.insertAdjacentHTML("beforeend", html);
+});
+
+$sendLocationBtn.addEventListener("click", () => {
   if (!navigator.geolocation) {
     return alert(`Sorry, your browser doesn't support Geolocation`);
   }
+
+  $sendLocationBtn.setAttribute("disabled", "disabled");
+
   navigator.geolocation.getCurrentPosition((location) => {
     socket.emit(
       "sendLocation",
@@ -26,6 +51,7 @@ document.getElementById("sendLocation").addEventListener("click", () => {
         longitude: location.coords.longitude,
       },
       () => {
+        $sendLocationBtn.removeAttribute("disabled");
         console.log("Location Shared");
       }
     );
