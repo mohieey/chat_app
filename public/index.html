@@ -4,27 +4,45 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="icon" href="./img/favicon.png" />
     <title>Chat App</title>
   </head>
   <body>
-    <h1>Chat App</h1>
-
-    <div id="msgs"></div>
-
-    <form id="msgForm">
-      <input type="text" placeholder="Your Message" id="msgFormInput" /><button
-        id="msgFormBtn"
-      >
-        Send
-      </button>
-    </form>
-    <button id="sendLocationBtn">Send Location</button>
+    <div class="chat">
+      <div class="chat__sidebar"></div>
+      <div class="chat__main">
+        <div id="msgs" class="chat__messages"></div>
+        <div class="compose">
+          <form id="msgForm">
+            <input
+              type="text"
+              placeholder="Your Message"
+              id="msgFormInput"
+            /><button id="msgFormBtn">Send</button>
+          </form>
+          <button id="sendLocationBtn">Send Location</button>
+        </div>
+      </div>
+    </div>
 
     <script id="msgTemplate" type="text/html">
-      <div><p>{{msg}}</p></div>
+      <div class="message">
+        <p>
+          <span class="message__name">Sender name</span>
+          <span class="message__meta">{{createdAt}}</span>
+        </p>
+        <p>{{msg}}</p>
+      </div>
     </script>
     <script id="locationTemplate" type="text/html">
-      <div><a href="{{url}}" target="_blank">Location</a></div>
+      <div class="message">
+        <p>
+          <span class="message__name">Sender name</span>
+          <span class="message__meta">{{createdAt}}</span>
+        </p>
+        <a href="{{url}}" target="_blank">Location</a>
+      </div>
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
