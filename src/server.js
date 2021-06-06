@@ -11,8 +11,14 @@ const io = socketio(server);
 
 app.use(express.static(publicDirectoryPath));
 
-io.on("connection", () => {
+io.on("connection", (socket) => {
   console.log("Connected to the WebSocket");
+
+  socket.emit("message", "Welcome");
+
+  socket.on("sendMessage", (msg) => {
+    io.emit("message", msg);
+  });
 });
 app.get("/", async (req, res) => {
   res.render("index.html");
