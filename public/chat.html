@@ -17,8 +17,10 @@
           <form id="msgForm">
             <input
               type="text"
-              placeholder="Your Message"
+              placeholder="Message"
               id="msgFormInput"
+              required
+              autocomplete="off"
             /><button id="msgFormBtn">Send</button>
           </form>
           <button id="sendLocationBtn">Send Location</button>
@@ -29,7 +31,7 @@
     <script id="msgTemplate" type="text/html">
       <div class="message">
         <p>
-          <span class="message__name">Sender name</span>
+          <span class="message__name">{{username}}</span>
           <span class="message__meta">{{createdAt}}</span>
         </p>
         <p>{{msg}}</p>
@@ -38,10 +40,10 @@
     <script id="locationTemplate" type="text/html">
       <div class="message">
         <p>
-          <span class="message__name">Sender name</span>
+          <span class="message__name">{{username}}</span>
           <span class="message__meta">{{createdAt}}</span>
         </p>
-        <a href="{{url}}" target="_blank">Location</a>
+        <a href="{{url}}" target="_blank">{{username}}'s location</a>
       </div>
     </script>
 
