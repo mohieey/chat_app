@@ -6,11 +6,12 @@ const $msgFormInput = document.getElementById("msgFormInput");
 const $msgFormBtn = document.getElementById("msgFormBtn");
 const $sendLocationBtn = document.getElementById("sendLocationBtn");
 const $msgs = document.getElementById("msgs");
+const $sideBar = document.getElementById("sideBar");
 
 //Templates
 const msgTemplate = document.getElementById("msgTemplate").innerHTML;
 const locationTemplate = document.getElementById("locationTemplate").innerHTML;
-
+const sideBarTemplate = document.getElementById("sideBarTemplate").innerHTML;
 //Options
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
@@ -31,6 +32,30 @@ $msgForm.addEventListener("submit", (e) => {
   });
 });
 
+socket.on("roomData", ({ room, users }) => {
+  const html = Mustache.render(sideBarTemplate, { room, users });
+  $sideBar.innerHTML = html;
+});
+
+const autoScroll = () => {
+  const $newMsg = $msgs.lastElementChild;
+
+  const newMsgStyles = getComputedStyle($newMsg);
+  const newMsgMargin = parseInt(newMsgStyles.marginBottom);
+  const newMsgHeight = $newMsg.offsetHeight + newMsgMargin;
+
+  const visibleHeight = $msgs.offsetHeight;
+
+  const containerHeight = $msgs.scrollHeight;
+
+  //How far have I scrolled?
+  const scrollOffset = $msgs.scrollTop + visibleHeight;
+
+  if (containerHeight - newMsgHeight <= scrollOffset) {
+    $msgs.scrollTop = containerHeight;
+  }
+};
+
 socket.on("message", (msg) => {
   console.log(msg);
   const html = Mustache.render(msgTemplate, {
@@ -39,6 +64,7 @@ socket.on("message", (msg) => {
     createdAt: moment(msg.createdAt).format("h:mm a"),
   });
   $msgs.insertAdjacentHTML("beforeend", html);
+  autoScroll();
 });
 
 socket.on("locationMessage", (msg) => {
@@ -48,6 +74,7 @@ socket.on("locationMessage", (msg) => {
     createdAt: moment(msg.createdAt).format("h:mm a"),
   });
   $msgs.insertAdjacentHTML("beforeend", html);
+  autoScroll();
 });
 
 $sendLocationBtn.addEventListener("click", () => {
