@@ -29,10 +29,12 @@ const removeUser = (id) => {
   }
 };
 
-getUser = (id) => {
+const getUser = (id) => {
   return users.find((user) => user.id === id);
 };
 
-getUsersInRoom = (room) => {
+const getUsersInRoom = (room) => {
   return (userInRoom = users.filter((user) => user.room === room));
 };
+
+module.exports = { addUser, removeUser, getUser, getUsersInRoom };
