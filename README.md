@@ -1,6 +1,6 @@
 ## Live Version:
 
-## https://mohiey-chat.herokuapp.com
+## https://chat--man.herokuapp.com/
 
 ## About The Project
 
